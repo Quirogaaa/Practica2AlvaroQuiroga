@@ -55,6 +55,7 @@ public class Main extends JFrame{
         );
         p1.setBackground(Color.decode("#edede9"));
         panel[0].add(p1);
+        //asdfdsf
 
 
 
