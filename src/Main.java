@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,8 +15,11 @@ public class Main extends JFrame{
     JTextField correoo,nombre;
     JPasswordField contraseña;
     JLabel labelNombre,labelCorreo,labelContraseña;
+    JComboBox combo1;
 
-    public Main(){
+    JComboBox combo2;
+
+    public Main() throws IOException {
         setLayout(new BorderLayout());
 
 
@@ -24,6 +28,7 @@ public class Main extends JFrame{
         initpanelInferior();
         initPaneluno();
         initPaneldos();
+        initPaneltres();
         initBoton();
         fill();
         initPantalla();
@@ -131,9 +136,88 @@ public class Main extends JFrame{
         panel[1].add(contraseña,grid[5]);
     }
 
+
+
+
+    public void initPaneltres() throws IOException {
+        panel[2].setLayout(new GridBagLayout());
+        JLabel texto = new JLabel("Selecciona tu pais y provincia");
+        texto.setFont(new Font("MONOSPACED",Font.PLAIN,40));
+        GridBagConstraints label = new GridBagConstraints();
+        GridBagConstraints combo = new GridBagConstraints();
+        GridBagConstraints comb2 = new GridBagConstraints();
+
+        label.gridx = 0;
+        label.gridy=0;
+        label.anchor = GridBagConstraints.WEST;
+        combo.gridx=0;
+        combo.gridy=1;
+        combo.anchor = GridBagConstraints.WEST;
+        comb2.gridx=0;
+        comb2.gridy=2;
+        comb2.anchor = GridBagConstraints.WEST;
+
+            combo1 = new JComboBox();
+            combo1.setFont(new Font("MONOSPACED",Font.PLAIN,30));
+            rellenaCombo1();
+            combo1.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent arg0) {
+                    try {
+                        rellenaCombo2((String) combo1.getSelectedItem());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            });
+        panel[2].add(texto,label);
+        panel[2].add(combo1,combo);
+
+
+            combo2 = new JComboBox();
+            combo2.setFont(new Font("MONOSPACED",Font.PLAIN,30));
+            rellenaCombo2((String) combo1.getSelectedItem());
+
+        panel[2].add(combo2,comb2);
+
+
+        }
+    private void rellenaCombo1() {
+            combo1.addItem("España");
+            combo1.addItem("Estados Unidos");
+        }
+    private void rellenaCombo2(String seleccionEnCombo1) throws IOException {
+            combo2.removeAllItems();
+            File f = new File("src/TXT/España.txt");
+            FileReader fr = new FileReader(f);
+            BufferedReader br = new BufferedReader(fr);
+            if (seleccionEnCombo1.equals("España")) {
+                String cadena;
+                while ((cadena = br.readLine()) != null) {
+                    combo2.addItem(cadena);
+                    cadena = br.readLine();
+
+                }
+                br.close();
+            } else if (seleccionEnCombo1.equals("Estados Unidos")) {
+                String cadena;
+                File f2 = new File("src/TXT/EstadosUnidos.txt");
+                FileReader fr2 = new FileReader(f2);
+                BufferedReader br2 = new BufferedReader(fr2);
+                while ((cadena = br2.readLine()) != null) {
+                    combo2.addItem(cadena);
+                    cadena = br2.readLine();
+
+                }
+
+            }
+
+        }
+
     private void fill(){
         correoo.setText("pepe@gmail.com");
-        contraseña.setText("asasA12/sas");
+        contraseña.setText("asasA12*sa");
         nombre.setText("pepe");
     }
 
@@ -153,7 +237,7 @@ public class Main extends JFrame{
     }
 
     private boolean comprobarContraseña(String x){
-        String com = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+        String com = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^*)(%$·!/&+=]).{8,16}$";
         Pattern patron = Pattern.compile(com);
         if (patron.matcher(x).matches()) {
             labelContraseña.setForeground(Color.black);
@@ -209,7 +293,7 @@ public class Main extends JFrame{
         getContentPane().setBackground(Color.decode("#d5bdaf"));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new Main();
     }
 }
