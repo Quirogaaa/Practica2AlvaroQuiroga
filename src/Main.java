@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main extends JFrame{
     JPanel panelIzquierdo,panelInferior;
@@ -9,19 +11,21 @@ public class Main extends JFrame{
     CardLayout tarjetas;
     JPanel[] panel = new JPanel[4];
     JEditorPane p1 = new JEditorPane();
-    BorderLayout miBorderLayout;
-
+    JTextField correoo,nombre;
+    JPasswordField contraseña;
+    JLabel labelNombre,labelCorreo,labelContraseña;
 
     public Main(){
         setLayout(new BorderLayout());
 
 
         initPanelTarjetas();
-        initPaneluno();
-        initPaneldos();
         initPanelIzq();
         initpanelInferior();
+        initPaneluno();
+        initPaneldos();
         initBoton();
+        fill();
         initPantalla();
     }
 
@@ -41,9 +45,18 @@ public class Main extends JFrame{
         siguiente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(panelTarjetas.getComponent(1).isShowing()){
+                    if(!comprobarCorreo(correoo.getText())){
+                        return;
+                    }
+                    if(!comprobarContraseña(contraseña.getText())){
+                        return;
+                    }
+                }
                 if(!panelTarjetas.getComponent(3).isShowing()){
                     tarjetas.next(panelTarjetas);
                 }
+
             }
         });
         panelInferior.add(siguiente);
@@ -67,9 +80,8 @@ public class Main extends JFrame{
         panel[0].add(p1);
     }
     private void initPaneldos(){
-        JTextField nombre,correo;
-        JPasswordField contraseña;
-        JLabel labelNombre,labelCorreo,labelContraseña;
+
+
         panel[1].setLayout(new GridBagLayout());
 
         GridBagConstraints[] grid = new GridBagConstraints[6];
@@ -101,22 +113,59 @@ public class Main extends JFrame{
 
 
         nombre = new JTextField();
-        correo = new JTextField();
+        correoo = new JTextField();
         contraseña = new JPasswordField();
         nombre.setPreferredSize(new Dimension(300,45));
-        correo.setPreferredSize(new Dimension(600,45));
+        correoo.setPreferredSize(new Dimension(600,45));
         contraseña.setPreferredSize(new Dimension(300,40));
         nombre.setFont(new Font("MONOSPACED",Font.PLAIN,40));
-        correo.setFont(new Font("MONOSPACED",Font.PLAIN,40));
+        correoo.setFont(new Font("MONOSPACED",Font.PLAIN,40));
         contraseña.setFont(new Font("MONOSPACED",Font.PLAIN,40));
 
 
         panel[1].add(labelNombre,grid[0]);
         panel[1].add(nombre,grid[1]);
         panel[1].add(labelCorreo,grid[2]);
-        panel[1].add(correo,grid[3]);
+        panel[1].add(correoo,grid[3]);
         panel[1].add(labelContraseña,grid[4]);
         panel[1].add(contraseña,grid[5]);
+    }
+
+    private void fill(){
+        correoo.setText("pepe@gmail.com");
+        contraseña.setText("asasA12/sas");
+        nombre.setText("pepe");
+    }
+
+    private boolean comprobarCorreo(String x){
+        Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        Matcher mather = pattern.matcher(x);
+
+        if (mather.find()) {
+            labelCorreo.setForeground(Color.black);
+            return true;
+        } else {
+            labelCorreo.setForeground(Color.RED);
+            return false;
+        }
+
+
+    }
+
+    private boolean comprobarContraseña(String x){
+        String com = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+        Pattern patron = Pattern.compile(com);
+        if (patron.matcher(x).matches()) {
+            labelContraseña.setForeground(Color.black);
+            return true;
+
+        }
+        else {
+            labelContraseña.setForeground(Color.red);
+            return false;
+        }
+
+
     }
 
     private void initPanelTarjetas(){
