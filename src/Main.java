@@ -21,6 +21,10 @@ public class Main extends JFrame {
 
     JComboBox combo2;
     JEditorPane editor = new JEditorPane();
+    File JFC;
+    JFileChooser ruta;
+    JLabel label2;
+    GridBagConstraints[] gridPanelCinco = new GridBagConstraints[3];
 
     public Main() throws IOException {
         setLayout(new BorderLayout());
@@ -33,6 +37,7 @@ public class Main extends JFrame {
         initPaneldos();
         initPaneltres();
         initPanelCuatro();
+        initPanelCinco();
         initBoton();
         fill();
         initPantalla();
@@ -67,6 +72,9 @@ public class Main extends JFrame {
                 }
                 if (panelTarjetas.getComponent(3).isShowing()) {
                     resultado();
+                }
+                if(panelTarjetas.getComponent(4).isShowing()){
+                    labels();
                 }
 
             }
@@ -229,7 +237,7 @@ public class Main extends JFrame {
         JLabel label = new JLabel("Se ha guardado el archivo");
         label.setFont(new Font("MONOSPACED", Font.PLAIN, 50));
         checkBox.setRolloverEnabled(false);
-        JFileChooser ruta = new JFileChooser();
+        ruta = new JFileChooser();
         ruta.setApproveButtonText("Guardar");
 
         ruta.setFont(new Font("MONOSPACED", Font.PLAIN, 50));
@@ -255,7 +263,7 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    File JFC = ruta.getSelectedFile();
+                    JFC = ruta.getSelectedFile();
                     String PATH = JFC.getAbsolutePath();
                     PrintWriter printwriter = new PrintWriter(JFC);
                     printwriter.println("Nombre: " + nombre.getText());
@@ -278,6 +286,46 @@ public class Main extends JFrame {
             }
         });
 
+
+    }
+
+    private void initPanelCinco(){
+        panel[4].setLayout(new GridBagLayout());
+
+        int y = 0;
+        int x = 0;
+        for (int i = 0; i < gridPanelCinco.length; i++) {
+            gridPanelCinco[i] = new GridBagConstraints();
+            gridPanelCinco[i].anchor = GridBagConstraints.WEST;
+
+                gridPanelCinco[i].gridx = x;
+                gridPanelCinco[i].gridy = y;
+
+
+            y++;
+        }
+        JButton boton = new JButton("Salir");
+        boton.setSize(50,20);
+        boton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        JLabel label = new JLabel("El registro se ha guardado en: ");
+        label.setFont(new Font("MONOSPACED", Font.PLAIN, 50));
+        panel[4].add(label, gridPanelCinco[0]);
+        panel[4].add(boton, gridPanelCinco[2]);
+
+
+    }
+    private void labels(){
+        label2 = new JLabel();
+        JFC = ruta.getSelectedFile();
+        String PATH = JFC.getAbsolutePath();
+        label2.setText(PATH);
+        label2.setFont(new Font("MONOSPACED", Font.PLAIN, 25));
+        panel[4].add(label2, gridPanelCinco[1]);
 
     }
 
