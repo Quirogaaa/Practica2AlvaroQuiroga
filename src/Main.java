@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main extends JFrame {
+    //Declaracion de las variables
     JPanel panelIzquierdo, panelInferior;
     JPanel panelTarjetas;
     CardLayout tarjetas;
@@ -28,9 +29,10 @@ public class Main extends JFrame {
 
     public Main() throws IOException {
         setLayout(new BorderLayout());
-
+        //Inicializamos los metodos
 
         initPanelTarjetas();
+        panelesColores();
         initPanelIzq();
         initpanelInferior();
         initPaneluno();
@@ -43,12 +45,14 @@ public class Main extends JFrame {
         initPantalla();
     }
 
+    //Los botones con sus getComponent respectivo para saber en que tarjeta estas y hacer diferentes acciones
     private void initBoton() {
         JButton siguiente, anterior;
         anterior = new JButton("anterior");
         anterior.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Para que no puedas ir para atras si estas en la primera
                 if (!panelTarjetas.getComponent(0).isShowing()) {
                     tarjetas.previous(panelTarjetas);
                 }
@@ -67,6 +71,7 @@ public class Main extends JFrame {
                         return;
                     }
                 }
+                //no puedas ir a siguiente si estas en la ultima
                 if (!panelTarjetas.getComponent(4).isShowing()) {
                     tarjetas.next(panelTarjetas);
                 }
@@ -198,6 +203,7 @@ public class Main extends JFrame {
 
     }
 
+    //un rellenacombo para rellenar los combobox
     private void rellenaCombo1() {
         combo1.addItem("España");
         combo1.addItem("Estados Unidos");
@@ -319,6 +325,11 @@ public class Main extends JFrame {
 
 
     }
+    private void panelesColores(){
+        for (int i = 0; i < panel.length; i++) {
+            panel[i].setBackground(Color.decode("#edede9"));
+        }
+    }
     private void labels(){
         label2 = new JLabel();
         JFC = ruta.getSelectedFile();
@@ -329,6 +340,7 @@ public class Main extends JFrame {
 
     }
 
+    //Resultado para que el JEditor muestre ya todos los resultado actualizados
     private void resultado() {
         editor.setText(
                 "<h1><b>Resultado del formulario</h1></b>" +
@@ -342,14 +354,17 @@ public class Main extends JFrame {
 
 
         );
+        editor.setBackground(Color.decode("#edede9"));
     }
 
+    //Fill para poner los datos automaticamente
     private void fill() {
         correoo.setText("pepe@gmail.com");
         contraseña.setText("asasA12*sa");
         nombre.setText("pepe");
     }
 
+    //comprobacion del correo para todos los posibles correos existentes
     private boolean comprobarCorreo(String x) {
         Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
         Matcher mather = pattern.matcher(x);
@@ -364,7 +379,7 @@ public class Main extends JFrame {
 
 
     }
-
+    //comprobacion de la contraseña con todos lo posibles simbolos existentes
     private boolean comprobarContraseña(String x) {
         String com = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^*)(%$·!/&+=]).{8,16}$";
         Pattern patron = Pattern.compile(com);
@@ -406,6 +421,7 @@ public class Main extends JFrame {
         add(panelIzquierdo, BorderLayout.WEST);
     }
 
+    //El panel para los botones
     private void initpanelInferior() {
 
 
